@@ -35,7 +35,9 @@
     {
       "id": "T03",
       "enabled": true,
-      "map": {"끝점": "엔드포인트"},
+      "find": "(?:API|HTTP|HTTPS|REST|URL|URI|OpenAPI|웹|/v1|/v2|/mcp|/admin)(?:\\s?의)?\\s?끝점|끝점\\s?(?:URL|URI|주소|경로)",
+      "use": "엔드포인트",
+      "label": "끝점(API 뜻 — 그래프의 엣지 끝점은 그대로 쓴다)",
       "allow": []
     },
     {
