@@ -1,6 +1,6 @@
 # SAP 용어 — 풀어 쓰는 법
 
-> Skill `ko-terms` 의 참조 파일이다. chat · 트로브 두 레포지토리가 함께 쓴다. SAP 쪽 뜻만 적는다 — 각 프로젝트가 정한 것(chat 은 접속 이름을 열쇠로 쓴다 등)은 `chat-terms.md` · `trove-terms.md` 에 있다.
+> Skill `ko-terms` 의 참조 파일이다. chat · 트로브 두 레포지토리가 함께 쓴다. SAP 쪽 뜻만 적는다 — 각 프로젝트가 정한 것(chat 은 접속 이름을 키로 쓴다 등)은 `chat-terms.md` · `trove-terms.md` 에 있다.
 > 표의 열: **용어 · 풀이(현장에서 부르는 말 포함) · 쓰는 법(예) · 출처**.
 > 출처 «일반 SAP 지식」 인 행은 2026-11-27 chat 쪽에서 처음 채웠다. **같은 날 트로브 쪽에서 트로브 개발 시스템(S/4HANA · ABAP 816) 실물(트로브 MCP tool 결과 · SAP 문서)로 확인했다** — 확인한 행은 출처 열이 «트로브 확인(날짜 · 근거)」 이고, 확인하지 못한 행만 «일반 SAP 지식」 으로 남는다.
 > 출처가 «트로브 확인」 인 행에서 근거로 적은 SAP 표준 객체는 그 시스템에 실제로 있다. `Z…` · `ACME-…` 같은 고객 객체 이름과 값(회사 코드 `1000` · GUI 상태 `MAIN` 등)은 설명용 예다.
@@ -63,7 +63,7 @@
 | 프로그램 유형(SUBC) | `TRDIR-SUBC` 의 한 글자 — `1` 실행 프로그램 · `I` include · `M` 모듈 풀 · `F` 함수 그룹 · `S` 서브루틴 풀 · `J` 인터페이스 풀 · `K` 클래스 풀 · `T` 타입 풀 · `X` 변환(XSLT · ST) · `Q` DB 프로시저 프록시 · `B` 행동 정의 | «SUBC `M` 이라 모듈 풀이다」 | 트로브 확인(2026-11-27 · describe_object DOMA SUBC) |
 | 이벤트 블록 | 실행 프로그램에서 정해진 때 도는 처리 블록(`INITIALIZATION` · `AT SELECTION-SCREEN` · `START-OF-SELECTION` 등). SAP 은 새 코드에서 이 방식 대신 메서드 호출만 두라고 권한다 | «`START-OF-SELECTION` 에서 메인 메서드를 부른다」 | 트로브 확인(2026-11-27 · search_help abapdocu Program Type) |
 | PBO · PAI | 화면(Dynpro) 흐름 로직의 두 단계 — **PBO**(Process Before Output · 화면을 보이기 전) · **PAI**(Process After Input · 사용자가 입력한 뒤). 각 단계에서 `MODULE` 을 부른다 | «PAI 의 `MODULE user_command_0100`」 | 트로브 확인(2026-11-27 · search_help abapdocu Messages - Behavior «PAI」) · 트로브 docs/adt_design.md |
-| GUI 상태 | 화면 위 메뉴 · 단추 · 기능 키 묶음(`SET PF-STATUS` · 만드는 T-code `SE41` Menu Painter) | «GUI 상태 `MAIN` 의 단추 `SAVE`」 | 트로브 확인(2026-11-27 · TSTCT SE41) · 트로브 docs/javagui_bdc_design.md |
+| GUI 상태 | 화면 위 메뉴 · 버튼 · 기능 키 묶음(`SET PF-STATUS` · 만드는 T-code `SE41` Menu Painter) | «GUI 상태 `MAIN` 의 버튼 `SAVE`」 | 트로브 확인(2026-11-27 · TSTCT SE41) · 트로브 docs/javagui_bdc_design.md |
 | 선택 화면 · 변형(variant) | **선택 화면** = 실행 프로그램이 돌기 전에 조건을 받는 화면(`PARAMETERS` · `SELECT-OPTIONS`) / **변형** = 그 화면에 넣을 값을 이름 붙여 저장한 것(배치 작업에 쓴다). «변형」 은 트랜잭션 변형 · 뷰 변형에도 쓰이니 무엇의 변형인지 붙여 쓴다 | «선택 화면 변형 `ZDAILY` 로 배치 실행」 | 트로브 docs/mcp_api_design.md · docs/reverse_reading_design.md |
 | Remote-Enabled Module | 함수 모듈의 처리 유형 «원격 호출 가능」(`TFDIR-FMODE` = `R`) — 이것이 RFC 함수다. 시스템 안에서도 부를 수 있다 | «`BAPI_SALESORDER_CREATEFROMDAT2` 는 Remote-Enabled Module」 | 트로브 확인(2026-11-27 · validate_refs FUNC fmode `R`) |
 | RFC Destination | 다른 시스템으로 RFC 를 보낼 접속 정의(T-code `SM59`). **저장소 객체가 아니다** | «RFC Destination `ZCRM_PRD` 로 부른다」 | 트로브 확인(2026-11-27 · TSTCT SM59 · 트로브 MCP 서버 설명) |

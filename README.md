@@ -84,7 +84,7 @@ claude plugin update ko-terms@ko-terms        # 플러그인을 새 버전으로
 - 커밋 전에 시험을 **각 2회** 돌린다(둘 다 종료코드 0 · `OK`).
 
   ```bash
-  python3 -m unittest discover -s tests -p "test_ko_guard.py" -v               # 단위 U1 ~ U16
+  python3 -m unittest discover -s tests -p "test_ko_guard.py" -v               # 단위 U1 ~ U20
   python3 -m unittest discover -s tests -p "test_ko_guard_adversarial.py" -v   # 적대 A1 ~ A14
   claude plugin validate .                                                     # 정의 파일 검사(아이콘 경고 하나는 정상)
   ```

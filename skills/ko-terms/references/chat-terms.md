@@ -14,7 +14,7 @@
 | chat | SAP 컨설턴트 · 개발자가 **대화로** SAP 시스템을 분석 · 설계 · 개발하게 돕는 시스템. 레포지토리 = 로컬 `/home/agent/projects/chat` + 원격 `github.com/minkyukim69/chat` |
 | 트로브(Trove) | SAP 용 **MCP 서버**. chat 이 **고객사 SAP 시스템**에 관한 사실을 얻는 유일한 곳이다(CR1). 레포지토리 = `github.com/minkyukim69/trove` |
 | 고객사 SAP 시스템(chat 에서) | 트로브가 관리하는 고객사의 SAP 접속(접속 이름) 하나하나와 그 시스템에만 있는 사실. 정본은 트로브 하나다(CR1). 일반 SAP 지식은 다른 MCP 서버로도 얻을 수 있다(CR12 · U82). 뜻 자체는 `sap-terms.md` |
-| 접속 이름(chat 에서) | chat 은 SAP 시스템을 **접속 이름으로** 가리킨다 — SID · client 는 고객사끼리 겹칠 수 있어 열쇠로 쓰지 않고 접속의 속성으로만 본다(설계서 §7-6 · U62). 뜻 자체는 `sap-terms.md` |
+| 접속 이름(chat 에서) | chat 은 SAP 시스템을 **접속 이름으로** 가리킨다 — SID · client 는 고객사끼리 겹칠 수 있어 키로 쓰지 않고 접속의 속성으로만 본다(설계서 §7-6 · U62). 뜻 자체는 `sap-terms.md` |
 | MCP 서버(등록) | chat 에 **admin 이 등록한 MCP 서버** — 트로브 + 일반 SAP 지식 서버 + 업무 도구 서버(이슈 · 문서 · 코드 레포지토리 등). 호출은 모두 MCP 관문 한 곳을 지난다(CR2 · CR12) |
 | MCP 관문 | 모든 MCP 서버 · 트로브 연계 API 호출이 지나는 **단일 관문**(`chat/core/mcp_gate.py`) — 인증 주입 · 오류 변환 · 상한을 한 곳에서 한다(CR2) |
 | MCP API · 연계 API | 트로브의 두 외부 진입점(트로브 확정 이름) — **MCP API**(`/mcp` — LLM 이 대화 중에 tool 을 고른다) · **연계 API**(`/v1` — chat 의 프로그램 코드가 정해진 순서로 부른다). 연계 API 의 정본은 트로브의 `/v1/openapi.json` · 요청 목록은 chat `docs/trove_api_requests.md` |
@@ -34,9 +34,9 @@
 | 시스템 그룹 | chat 이 **접속 이름 몇 개를 묶은 단위**(예 한 고객사의 DEV · QAS · PRD). 설계개발표준 하나를 그룹 하나에 붙인다(U63) |
 | System Prompt · Skill | LLM 에 싣는 **자산** — 이름 · 버전 · 활성으로 관리한다(GR10 · GR30). System Variant(System Prompt + 생성 파라미터 묶음)는 **쓰지 않는다**(U72) · 저장 자산 «User Prompt」 도 **두지 않는다**(U81 — 사용자가 대화창에 치는 글은 자산이 아니다) |
 | General Skill · 고객 Skill | **General Skill** = 관리 › Skill (General) 에서 관리하는 chat 전체 공통 Skill · **고객 Skill** = 메뉴 «고객 표준」 이 만든 그 고객사(또는 시스템 그룹)만의 기준(코드 이름 `reference_doc` — U237) |
-| 고객 표준 · 표준안 · 양식 | **고객 표준** = 고객 Skill 의 화면 이름 · **표준안** = 그 고객 Skill 로 저장한 md 문서의 화면 이름 · **양식** = 문서 하나를 어떻게 만드는지 담은 작성 Skill(머리말 `kind: doc_author`)(standard_docs_design) |
+| 고객 표준 · 표준안 · 양식 | **고객 표준** = 고객 Skill 의 화면 이름 · **표준안** = 그 고객 Skill 로 저장한 md 문서의 화면 이름 · **양식** = 문서 하나를 어떻게 만드는지 담은 작성 Skill(YAML 헤더 `kind: doc_author`)(standard_docs_design) |
 | 작성 용도 | 그 고객 Skill 을 고를 수 있는 대화 용도(예전 «assign · 쓸 곳」 — U259 · 코드 이름 `targets`) |
-| 플레이북 | 여러 MCP tool 을 **정해진 순서로 엮어 쓰는 절차**를 적은 Skill(머리말 `kind: playbook`). 대화창에서 서버처럼 켜고 끈다(U117) · 플레이북 에이전트 = 그것을 만드는 admin 전용 대화 용도(U173) |
+| 플레이북 | 여러 MCP tool 을 **정해진 순서로 엮어 쓰는 절차**를 적은 Skill(YAML 헤더 `kind: playbook`). 대화창에서 서버처럼 켜고 끈다(U117) · 플레이북 에이전트 = 그것을 만드는 admin 전용 대화 용도(U173) |
 | 산출물 | 대화로 만든 **분석서 · 설계서 · 코드** 같은 결과 문서 |
 
 ## C. 대화 엔진 · 오케스트레이션
@@ -81,7 +81,7 @@
 |---|---|
 | 역설계서 | 현행 SAP 객체(프로그램 · 서비스)가 **지금 어떻게 동작하는지** 사실로 적은 문서. 옮길 곳의 대응 · 구현 방법은 담지 않는다(U263) |
 | 요약본 · 이관용 상세(C2C · C2R · R2R) | 업무 담당자도 읽는 짧은 역설계서 · 다시 만들 수 있을 만큼 자세한 역설계서(Classic → Classic · Classic → RAP · RAP · SEGW → RAP)(reverse_doc_design §0) |
-| 양식 Skill(역설계) | 역설계서의 장 구성과 쓰는 법을 담은 Skill(머리말 `kind: reverse_form`). 코드는 장 **키**만 안다 |
+| 양식 Skill(역설계) | 역설계서의 장 구성과 쓰는 법을 담은 Skill(YAML 헤더 `kind: reverse_form`). 코드는 장 **키**만 안다 |
 | 사실 장 · 뜻 장 | **사실 장** = 정답이 하나인 장 — 코드가 재료와 트로브 조회로 만든다(출처 `code` · 잠금) / **뜻 장** = 해석이 필요한 장 — LLM 이 장마다 한 번 쓴다(출처 `llm` · 사람이 고치면 `human`)(reverse_doc_design §15) |
 | 재료 · 읽기 묶음 | **읽기 묶음** = 트로브가 객체 하나의 소스를 읽는 순서대로 묶어 주는 응답(연계 API `/v1/reverse-pack`) · **재료** = chat 이 그것을 끝까지 받아 잠시 보관한 것(10일 — U286) |
 | 생성기 · writer | 사실 장을 만드는 코드(`reverse_generate`) · 뜻 장을 쓰는 LLM 역할(결속 `(reverse, writer)`) |
