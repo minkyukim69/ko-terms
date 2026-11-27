@@ -22,7 +22,7 @@
 | 용어 | 풀이 | 쓰는 법(예) | 출처 |
 |---|---|---|---|
 | 객체 유형 · 하위유형 | SAP 객체의 종류(ADT 기준 — 예 `TABL` 테이블 · `PROG` 프로그램 · `CLAS` 클래스)와 그 안의 세부 종류(예 `TABL/DT` 투명 테이블). `유형/하위유형` 모양으로 함께 쓴다 | «`TABL/DT` 인 `ZSD_HEAD`」 — 트로브가 돌려준 값을 바꾸지 않고 그대로 넘긴다 | chat CLAUDE.md CR3 |
-| skeleton / full | SAP 객체 응답의 노드 표식 — **skeleton** = 이름만 있는 자리표시 노드 / **full** = 내용까지 채워진 노드. skeleton 이 «없는 객체」 라는 뜻은 아니다 | «skeleton 노드라 내용은 아직 없다(없는 객체가 아니다)」 | chat CLAUDE.md 0-5-2 · CR3 |
+| skeleton / full | SAP 객체 응답의 노드 표식 — **skeleton** = 이름만 있는 노드(skeleton 노드) / **full** = 내용까지 채워진 노드. skeleton 이 «없는 객체」 라는 뜻은 아니다 | «skeleton 노드라 내용은 아직 없다(없는 객체가 아니다)」 | chat CLAUDE.md 0-5-2 · CR3 |
 | 고객 객체 · 이름 공간 · CBO | 고객이 만든 객체. 이름이 `Z` · `Y` 로 시작하거나 등록한 이름 공간(`/ABC/…`) 안에 있다. 한국 현장에서는 고객 개발 객체를 «CBO」 라고 부른다 | «CBO 프로그램 `ZSDR0010`」 · 이름 공간이 든 이름은 `/ABC/CL_ORDER` 처럼 그대로 | 트로브 확인(2026-11-27 · 트로브 MCP 서버 설명 «CBO = 이름이 Z · Y 로 시작」) · chat 역설계 설계서 §0 |
 | 패키지(DEVC) | 개발 객체를 묶는 단위(옛 이름 «개발 클래스」 · 정의 테이블 `TDEVC`). `$TMP` 는 로컬 패키지라 이송하지 않는다 | «패키지 `VA` 의 객체」 · «`$TMP` 에 만든 시험 객체」 | 트로브 확인(2026-11-27 · validate_refs DEVC $TMP · VA · DD02T TDEVC) |
 | TR(트랜스포트 요청) · 작업 | 바뀐 객체 · 설정을 다음 시스템으로 옮기는 묶음. 현장에서 «TR」 · «트랜스포트」. 워크벤치 요청(`K` — 개발 객체)과 커스터마이징 요청(`W` — 설정)이 있고, 그 아래 사람마다 **작업**(task — `S` 개발 · `Q` 커스터마이징)이 달린다. 번호는 `<SID>K9nnnnn` 모양 | «TR `DEVK900123` 에 넣는다」 · «작업 `DEVK900124` 는 TR `DEVK900123` 아래」 | 트로브 확인(2026-11-27 · E070 TRKORR `EQAK900002` 등 · 도메인 TRFUNCTION 고정값) |
@@ -52,7 +52,7 @@
 | 리포트 · 모듈 풀 · Dynpro | 실행 프로그램(프로그램 유형 SUBC `1`) · 화면 중심 프로그램(SUBC `M`) · 화면 하나(번호 · PBO · PAI 흐름 — 원천 테이블 `D020S`). **ADT 하위유형은 둘 다 `PROG/P`** 이고 SUBC 로 가른다 | «모듈 풀 `SAPMV45A`(SUBC `M`)의 화면 `0100`」 | 트로브 확인(2026-11-27 · TRDIR SAPMV45A SUBC · 트로브 등록부 subtype_map) |
 | 함수 모듈 · 함수 그룹 | 이름으로 부르는 ABAP 함수(목록 `TFDIR`) · 그것을 묶는 단위. 함수 그룹의 주 프로그램 이름은 `SAPL<그룹>`(SUBC `F`) | «함수 그룹 `V45A` 의 주 프로그램 `SAPLV45A`」 · «함수 모듈 `Z_SD_GET_ORDER`」 | 트로브 확인(2026-11-27 · validate_refs FUGR V45A · TRDIR SAPLV45A SUBC `F`) |
 | RFC · BAPI | **RFC** = 다른 시스템에서 부를 수 있는 함수 모듈(원격 호출 — 처리 유형 Remote-Enabled Module) / **BAPI** = 업무 객체의 메서드로 SAP 이 공개한 표준 RFC 함수 모듈 | «BAPI `BAPI_SALESORDER_CREATEFROMDAT2`(remote-enabled)」 | 트로브 확인(2026-11-27 · validate_refs FUNC — remote_callable=true · FMODE `R`) |
-| 메시지 클래스 | 메시지 번호 · 글을 묶은 단위(객체 유형 `MSAG` · 글은 테이블 `T100`). 글에 `&1` ~ `&4` 자리표시가 들어간다 | «메시지 `V1` `311`(`&1 &2 has been saved.`)」 | 트로브 확인(2026-11-27 · get_message V1 311) |
+| 메시지 클래스 | 메시지 번호 · 글을 묶은 단위(객체 유형 `MSAG` · 글은 테이블 `T100`). 글에 `&1` ~ `&4` 플레이스홀더가 들어간다 | «메시지 `V1` `311`(`&1 &2 has been saved.`)」 | 트로브 확인(2026-11-27 · get_message V1 311) |
 | 권한 객체 | 권한 검사의 단위(필드 몇 개 · `AUTHORITY-CHECK` 로 검사 · 객체 유형 `SUSO` · 권한 클래스 `SUSC` 아래 · 정의 T-code `SU21`). 정의 테이블 이름이 `TOBJ` 라서 고객화 객체 유형 `TOBJ` 와 헷갈리기 쉽다 | «권한 객체 `V_VBAK_VKO`(필드 `VKORG` · `VTWEG` · `SPART` · `ACTVT`)」 | 트로브 확인(2026-11-27 · get_auth_object V_VBAK_VKO · DD02T TOBJ) |
 | SPA/GPA 파라미터 | 사용자 기억값(`SET` · `GET PARAMETER ID` · 객체 유형 `PARA`) — 화면 사이에 값을 넘긴다. 파라미터 자체에는 글이 없고, 그것을 쓰는 데이터 요소로 뜻을 안다 | «파라미터 ID `AUN`(Sales order number — 데이터 요소 `VBELN` · `KDAUF` 등이 쓴다)」 | 트로브 확인(2026-11-27 · get_parameter AUN) |
 | 잠금 객체 | 같은 데이터를 둘이 함께 고치지 못하게 하는 SAP 잠금(객체 유형 `ENQU` · 만들면 `ENQUEUE_<이름>` · `DEQUEUE_<이름>` 함수가 생긴다) | «잠금 객체 `EVVBAKE`(Sales document (exclusive)) — 함수 `ENQUEUE_EVVBAKE`」 — DB 잠금과 구분 | 트로브 확인(2026-11-27 · describe_object ENQU EVVBAKE · validate_refs FUNC ENQUEUE_EVVBAKE) |

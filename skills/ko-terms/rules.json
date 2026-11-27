@@ -4,7 +4,7 @@
   "thresholds": {
     "reply_foreign_ratio": 0.85,
     "reply_foreign_words": 20,
-    "tool_foreign_ratio": 0.70,
+    "tool_foreign_ratio": 0.7,
     "tool_foreign_words": 60,
     "tool_max_chars": 40000,
     "desc_foreign_words": 2,
@@ -42,25 +42,34 @@
     {
       "id": "T04",
       "enabled": true,
-      "map": {"접속면": "인터페이스", "계약면": "모듈 간 경계"},
+      "map": {
+        "접속면": "인터페이스",
+        "계약면": "모듈 간 경계"
+      },
       "allow": []
     },
     {
       "id": "T05",
       "enabled": true,
-      "map": {"문맥 창": "컨텍스트 윈도우"},
+      "map": {
+        "문맥 창": "컨텍스트 윈도우"
+      },
       "allow": []
     },
     {
       "id": "T06",
       "enabled": true,
-      "map": {"지시문": "프롬프트"},
+      "map": {
+        "지시문": "프롬프트"
+      },
       "allow": []
     },
     {
       "id": "T07",
       "enabled": true,
-      "map": {"대리인": "에이전트"},
+      "map": {
+        "대리인": "에이전트"
+      },
       "allow": []
     },
     {
@@ -89,7 +98,26 @@
       "find": "(?<![가-힣])원장",
       "use": "원본 테이블",
       "label": "원장",
-      "allow": ["총계정원장", "보조원장", "원장 계정"]
+      "allow": [
+        "총계정원장",
+        "보조원장",
+        "원장 계정"
+      ]
+    },
+    {
+      "id": "T10",
+      "enabled": true,
+      "map": {
+        "표지": "구분자",
+        "봉함": "암호화 저장",
+        "봉한다": "암호화해 저장한다",
+        "봉투": "공통 구조",
+        "자리표시": "skeleton 노드 · 플레이스홀더",
+        "이름표": "라벨",
+        "정리기": "SQL 검증기",
+        "잰다": "측정한다"
+      },
+      "allow": []
     }
   ]
 }

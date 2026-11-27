@@ -2,11 +2,11 @@
 
 설계:
     - 무엇을 검증하나: hook 을 **제품과 같은 진입점**(하위 프로세스 `python3 -I hooks/ko_guard.py <이벤트>` + 표준 입력 JSON)으로
-      띄워 표준 출력 · 종료코드를 잰다(GR54 B — 함수를 직접 부르지 않는다).
+      띄워 표준 출력 · 종료코드를 측정한다(GR54 B — 함수를 직접 부르지 않는다).
         U1  SessionStart → 안내에 언어 규칙 · Skill 이름
         U2  Stop · 한국어 답(코드 블록 안은 영어) → 출력 없음
-        U3  Stop · 영어 답 30낱말 → 되돌림 · 사유에 «한국어」
-        U4  Stop · «이 버전은 …」 통과 / «새 판을 만든다」 되돌림(T01)
+        U3  Stop · 영어 답 30낱말 → 재작성 요청 · 사유에 «한국어」
+        U4  Stop · «이 버전은 …」 통과 / «새 판을 만든다」 재작성 요청(T01)
         U5  Stop · 판단 · 판정 · 판매 · 판별 · 판독 · 출판 · 판다 → 통과(오탐 없음)
         U6  Stop · «판」 을 인용 → 통과
         U7  Stop · stop_hook_active 참 + 영어 답 → 통과(한 번만)
@@ -14,13 +14,14 @@
         U9  PreToolUse · `git commit -m "Fix bug"` 거부 / 한국어 heredoc + 영어 꼬리 줄 통과
         U10 PostToolUse · 영어 결과 100낱말 → 한 줄 / 한국어 결과 → 없음
         U11 마지막 사용자 글이 `!en …` → 모든 이벤트 통과
-        U12 T09 «총계정원장」 통과 / «원장 테이블」 되돌림
+        U12 T09 «총계정원장」 통과 / «원장 테이블」 재작성 요청
         U13 rules.json 규칙 번호 ↔ references/it-terms.md «자동 검사」 칸의 규칙 번호가 같다(두 벌 어긋남 방지)
-        U14 SubagentStop · 영어 보고 되돌림 / 한국어 보고는 용어(«판」)가 있어도 통과(D4 — 언어만) — 설계 표에 더한 케이스
+        U14 SubagentStop · 영어 보고 재작성 요청 / 한국어 보고는 용어(«판」)가 있어도 통과(D4 — 언어만) — 설계 표에 더한 케이스
         U15 SKILL.md 5절이 가리키는 참조 파일 ↔ references/ 의 md 파일이 같고 모두 있다(등록 누락 방지 — GR53 S3)
         U16 hooks/hooks.json 에 다섯 이벤트가 모두 있고, 명령마다 이벤트 인자 · `${CLAUDE_PLUGIN_ROOT}` · `|| exit 1` 이 있다
-        U17 T03 «끝점」 — 그래프 뜻(엣지의 끝점 · 끝점 노드 · 끝점이 없으면) 통과 / API 뜻(API 끝점 · /v1 끝점 · 끝점 URL) 되돌림
-        U18 T02 «레포」 — «레포에 있다」 · «두 레포의」 되돌림 / «레포지토리」 · «레포트」(report) 통과 · 인용 «레포」 통과
+        U17 T03 «끝점」 — 그래프 뜻(엣지의 끝점 · 끝점 노드 · 끝점이 없으면) 통과 / API 뜻(API 끝점 · /v1 끝점 · 끝점 URL) 재작성 요청
+        U18 T02 «레포」 — «레포에 있다」 · «두 레포의」 재작성 요청 / «레포지토리」 · «레포트」(report) 통과 · 인용 «레포」 통과
+        U19 T10 — «표지 · 봉함 · 봉한다 · 봉투 · 자리표시 · 이름표 · 정리기 · 잰다」 재작성 요청 / 바꾼 말(구분자 · 암호화 저장 · 공통 구조 · 라벨 · 측정한다) · 롤백 뜻 «되돌린다」 통과
     - 분모: 케이스마다 몇 개를 확인했는지 찍는다(GR54 A3) · unittest 의 «Ran N tests」 가 전체 분모다.
     - 상태: hook 은 상태를 쓰지 않는다 — 시험이 만드는 것은 임시 폴더의 대화 기록 파일뿐이다(끝나면 지운다).
 
@@ -36,6 +37,7 @@
     - 없음 — 테스트 진입점
 
 변경 이력:
+    - 2026-11-27 · U19 추가 — T10(G절 «다」 결정) · 설명 글의 «되돌림」 → «재작성 요청」 · U17 그래프 예문의 «자리표시 노드」 → «skeleton 노드」(T10 에 걸림 — 예문이 낡음)
     - 2026-11-27 · U18 추가 — T02 를 켬(chat CLAUDE.md 정리 뒤) · «레포트」 는 잡지 않음
     - 2026-11-27 · U17 추가 — T03 을 «API 문맥의 끝점」 만 잡게 좁힘(그래프의 «끝점」 은 정상 — it-terms A1 · 사용자 결정)
     - 2026-11-27 · 플러그인 레포지토리 `ko-terms` 로 옮김(경로 `tests/` · `hooks/` · `skills/`) · U15(SKILL.md ↔ 참조 파일) · U16(hooks.json 배선) 추가
@@ -120,7 +122,7 @@ class KoGuardUnit(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(out["decision"], "block")
         self.assertIn("한국어", out["reason"])
-        print("\n[U3] 영어 답 1개 → 되돌림")
+        print("\n[U3] 영어 답 1개 → 재작성 요청")
 
     def test_u04_version_word(self):
         self.assertEqual(stop("이 버전은 정상입니다. 새 버전을 만든다.")[:2], (0, None))
@@ -128,7 +130,7 @@ class KoGuardUnit(unittest.TestCase):
         self.assertEqual(out["decision"], "block")
         self.assertIn("T01", out["reason"])
         self.assertIn("버전", out["reason"])
-        print("\n[U4] «버전」 통과 1 · «판」 되돌림 1")
+        print("\n[U4] «버전」 통과 1 · «판」 재작성 요청 1")
 
     def test_u05_no_false_positive(self):
         words = ["판단", "판정", "판매", "판별", "판독", "출판", "판다", "판결", "판촉"]
@@ -196,20 +198,20 @@ class KoGuardUnit(unittest.TestCase):
             ]
             for c in checks:
                 self.assertEqual(c[:2], (0, None))
-            # 같은 대화 기록인데 !en 이 없으면 되돌린다 — 위 통과가 !en 덕분임을 확인(GR54 C2)
+            # 같은 대화 기록인데 !en 이 없으면 재작성을 요청한다 — 위 통과가 !en 덕분임을 확인(GR54 C2)
             tp2 = write_transcript(d, "평범한 질문")
             self.assertEqual(stop(ENGLISH_30, transcript_path=tp2)[1]["decision"], "block")
             # 내용이 블록 목록인 사용자 글
             tp3 = write_transcript(d, [{"type": "text", "text": "선택 영역"}, {"type": "text", "text": "!en go"}])
             self.assertEqual(stop(ENGLISH_30, transcript_path=tp3)[:2], (0, None))
-        print(f"\n[U11] !en 이벤트 {len(checks)}가지 통과 · 대조 1(없으면 되돌림) · 블록 목록 글 1")
+        print(f"\n[U11] !en 이벤트 {len(checks)}가지 통과 · 대조 1(없으면 재작성 요청) · 블록 목록 글 1")
 
     def test_u12_ledger(self):
         self.assertEqual(stop("총계정원장 과 보조원장, 원장 계정은 SAP 회계 용어다.")[:2], (0, None))
         code, out, _ = stop("원장 테이블을 읽는다.")
         self.assertEqual(out["decision"], "block")
         self.assertIn("T09", out["reason"])
-        print("\n[U12] T09 예외 3가지 통과 · «원장 테이블」 되돌림 1")
+        print("\n[U12] T09 예외 3가지 통과 · «원장 테이블」 재작성 요청 1")
 
     def test_u13_rule_ids_match(self):
         with open(os.path.join(SKILL, "rules.json"), encoding="utf-8") as fh:
@@ -230,7 +232,7 @@ class KoGuardUnit(unittest.TestCase):
         self.assertIn("보고", out["reason"])
         ok = call({"hook_event_name": "SubagentStop", "last_assistant_message": "새 판을 만들었습니다. 결과는 정상입니다."})
         self.assertEqual(ok[:2], (0, None))
-        print("\n[U14] 하위 에이전트 보고 2가지(영어 되돌림 · 용어는 보지 않음)")
+        print("\n[U14] 하위 에이전트 보고 2가지(영어 재작성 요청 · 용어는 보지 않음)")
 
 
     def test_u15_skill_references(self):
@@ -259,7 +261,7 @@ class KoGuardUnit(unittest.TestCase):
         print(f"\n[U16] hook 배선 {checked}개 — 이벤트 · 경로 · 종료코드 바꿈 확인")
 
     def test_u17_endpoint_word(self):
-        graph = ["엣지의 끝점 노드를 skeleton 으로 만든다.", "끝점이 아직 없으면 자리표시 노드를 둔다.", "끝점 유형을 판정한다."]
+        graph = ["엣지의 끝점 노드를 skeleton 으로 만든다.", "끝점이 아직 없으면 skeleton 노드를 둔다.", "끝점 유형을 판정한다."]
         for t in graph:
             with self.subTest(t=t):
                 self.assertEqual(stop(t)[:2], (0, None), t)
@@ -270,7 +272,7 @@ class KoGuardUnit(unittest.TestCase):
                 self.assertEqual(out["decision"], "block", t)
                 self.assertIn("T03", out["reason"])
                 self.assertIn("엔드포인트", out["reason"])
-        print(f"\n[U17] 그래프 뜻 «끝점」 {len(graph)}개 통과 · API 뜻 {len(api)}개 되돌림")
+        print(f"\n[U17] 그래프 뜻 «끝점」 {len(graph)}개 통과 · API 뜻 {len(api)}개 재작성 요청")
 
 
     def test_u18_repo_word(self):
@@ -285,7 +287,23 @@ class KoGuardUnit(unittest.TestCase):
         for t in ok:
             with self.subTest(t=t):
                 self.assertEqual(stop(t)[:2], (0, None), t)
-        print(f"\n[U18] «레포」 {len(bad)}개 되돌림 · 레포지토리 · 레포트 · 인용 {len(ok)}개 통과")
+        print(f"\n[U18] «레포」 {len(bad)}개 재작성 요청 · 레포지토리 · 레포트 · 인용 {len(ok)}개 통과")
+
+
+    def test_u19_settled_words(self):
+        bad = ["첨부 표지를 붙인다.", "비밀값은 봉함으로 둔다.", "키로 봉한다.", "응답 봉투를 읽는다.",
+               "자리표시 노드가 있다.", "상태 이름표를 붙인다.", "SQL 정리기를 거친다.", "다시 잰다."]
+        for t in bad:
+            with self.subTest(t=t):
+                code, out, _ = stop(t)
+                self.assertEqual(out["decision"], "block", t)
+                self.assertIn("T10", out["reason"])
+        ok = ["첨부 구분자를 붙인다.", "비밀값은 암호화 저장으로 둔다.", "응답 공통 구조를 읽는다.", "상태 라벨을 붙인다.",
+              "다시 측정한다.", "실패하면 트랜잭션을 되돌린다."]
+        for t in ok:
+            with self.subTest(t=t):
+                self.assertEqual(stop(t)[:2], (0, None), t)
+        print(f"\n[U19] T10 {len(bad)}개 재작성 요청 · 바꾼 말 · 롤백 뜻 {len(ok)}개 통과")
 
 
 if __name__ == "__main__":

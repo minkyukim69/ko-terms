@@ -4,12 +4,12 @@
 chat · 트로브 두 레포지토리가 함께 쓴다. 용어 표(번역 기준)의 정본은 이 레포지토리 하나다.
 
 - **무엇을 정하나**: 영어 IT 용어를 어떤 한국어로 쓰나(«Version → 버전」 · «Endpoint → 엔드포인트」 · «Prompt → 프롬프트」 …) · 어색한 번역은 무엇인가 · SAP 용어(TR · 데이터 요소 · BAdI · CDS …)를 어떻게 풀어 쓰나 · 각 프로젝트가 만든 말의 뜻.
-- **어떻게 지키게 하나**: Skill 이 규칙과 용어 표를 주고, hook 이 Claude 의 글을 검사해 영어 답 · 영어 명령 설명 · 쓰지 않는 용어를 되돌린다.
+- **어떻게 지키게 하나**: Skill 이 규칙과 용어 표를 주고, hook 이 Claude 의 글을 검사해 영어 답 · 영어 명령 설명 · 쓰지 않는 용어가 있으면 재작성을 요청한다.
 
 | 무엇 | 위치 | 하는 일 |
 |---|---|---|
 | Skill `ko-terms:ko-terms` | `skills/ko-terms/SKILL.md` + `references/*.md` | 언어 규칙 · 문서 쓰기 규칙 · 용어 원칙 · 용어 표 넷(IT · SAP · chat · 트로브) |
-| hook `ko_guard` | `hooks/hooks.json` + `hooks/ko_guard.py` | 답 · 하위 에이전트 보고가 영어면 한 번 되돌림 · Bash 명령 설명과 커밋 메시지 첫 줄이 영어면 거부 · 쓰지 않는 용어가 답에 있으면 한 번 되돌림 |
+| hook `ko_guard` | `hooks/hooks.json` + `hooks/ko_guard.py` | 답 · 하위 에이전트 보고가 영어면 한 번 재작성 요청 · Bash 명령 설명과 커밋 메시지 첫 줄이 영어면 거부 · 쓰지 않는 용어가 답에 있으면 한 번 재작성 요청 |
 
 hook 은 `python3` 표준 라이브러리만 쓴다(설치할 패키지 없음). 자동 검사 규칙 · 기준값의 정본은 `skills/ko-terms/rules.json` 이다.
 
