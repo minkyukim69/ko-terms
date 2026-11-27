@@ -1,0 +1,6 @@
+{
+  "name": "ko-terms",
+  "description": "chat · 트로브 레포지토리의 한국어 쓰기 · 용어 규칙 Skill 과 그것을 지키게 하는 hook(영어 답 되돌림 · 영어 Bash 설명 거부 · 용어 검사)",
+  "author": { "name": "minkyukim69" },
+  "repository": "https://github.com/minkyukim69/ko-terms"
+}

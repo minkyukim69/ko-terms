@@ -1,0 +1,12 @@
+{
+  "name": "ko-terms",
+  "owner": { "name": "minkyukim69" },
+  "description": "chat · 트로브가 함께 쓰는 한국어 · 용어 플러그인 마켓플레이스",
+  "plugins": [
+    {
+      "name": "ko-terms",
+      "source": "./",
+      "description": "한국어 쓰기 · 용어 규칙 Skill + hook"
+    }
+  ]
+}
