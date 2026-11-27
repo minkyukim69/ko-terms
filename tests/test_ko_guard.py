@@ -20,6 +20,7 @@
         U15 SKILL.md 5절이 가리키는 참조 파일 ↔ references/ 의 md 파일이 같고 모두 있다(등록 누락 방지 — GR53 S3)
         U16 hooks/hooks.json 에 다섯 이벤트가 모두 있고, 명령마다 이벤트 인자 · `${CLAUDE_PLUGIN_ROOT}` · `|| exit 1` 이 있다
         U17 T03 «끝점」 — 그래프 뜻(엣지의 끝점 · 끝점 노드 · 끝점이 없으면) 통과 / API 뜻(API 끝점 · /v1 끝점 · 끝점 URL) 되돌림
+        U18 T02 «레포」 — «레포에 있다」 · «두 레포의」 되돌림 / «레포지토리」 · «레포트」(report) 통과 · 인용 «레포」 통과
     - 분모: 케이스마다 몇 개를 확인했는지 찍는다(GR54 A3) · unittest 의 «Ran N tests」 가 전체 분모다.
     - 상태: hook 은 상태를 쓰지 않는다 — 시험이 만드는 것은 임시 폴더의 대화 기록 파일뿐이다(끝나면 지운다).
 
@@ -35,6 +36,7 @@
     - 없음 — 테스트 진입점
 
 변경 이력:
+    - 2026-11-27 · U18 추가 — T02 를 켬(chat CLAUDE.md 정리 뒤) · «레포트」 는 잡지 않음
     - 2026-11-27 · U17 추가 — T03 을 «API 문맥의 끝점」 만 잡게 좁힘(그래프의 «끝점」 은 정상 — it-terms A1 · 사용자 결정)
     - 2026-11-27 · 플러그인 레포지토리 `ko-terms` 로 옮김(경로 `tests/` · `hooks/` · `skills/`) · U15(SKILL.md ↔ 참조 파일) · U16(hooks.json 배선) 추가
     - 2026-11-27 · 최초 작성(ko-terms 설계서 v0.2 §8-1 U1 ~ U13 + U14)
@@ -269,6 +271,21 @@ class KoGuardUnit(unittest.TestCase):
                 self.assertIn("T03", out["reason"])
                 self.assertIn("엔드포인트", out["reason"])
         print(f"\n[U17] 그래프 뜻 «끝점」 {len(graph)}개 통과 · API 뜻 {len(api)}개 되돌림")
+
+
+    def test_u18_repo_word(self):
+        bad = ["코드는 레포에 있다.", "두 레포의 설계서에 적는다."]
+        for t in bad:
+            with self.subTest(t=t):
+                code, out, _ = stop(t)
+                self.assertEqual(out["decision"], "block", t)
+                self.assertIn("T02", out["reason"])
+                self.assertIn("레포지토리", out["reason"])
+        ok = ["코드는 레포지토리에 있다.", "주간 레포트를 썼다.", "«레포」 는 쓰지 않는 줄임말이다."]
+        for t in ok:
+            with self.subTest(t=t):
+                self.assertEqual(stop(t)[:2], (0, None), t)
+        print(f"\n[U18] «레포」 {len(bad)}개 되돌림 · 레포지토리 · 레포트 · 인용 {len(ok)}개 통과")
 
 
 if __name__ == "__main__":

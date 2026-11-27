@@ -47,6 +47,7 @@
     - 테스트: tests/test_ko_guard.py · tests/test_ko_guard_adversarial.py
 
 변경 이력:
+    - 2026-11-27 · 되돌림 사유 끝의 Skill 이름을 플러그인 이름 `ko-terms:ko-terms` 로(옛 이름이 남아 있었다 — chat 반영 확인에서 찾음)
     - 2026-11-27 · chat 레포지토리 `.claude/hooks/` 에서 플러그인 레포지토리 `ko-terms` 로 옮김(chat · 트로브 공유 — 사용자 결정) ·
       세션 시작 안내가 가리키는 Skill 을 플러그인 이름(`ko-terms:ko-terms`)으로 · 판정 동작은 그대로
     - 2026-11-27 · 최초 작성(ko-terms 설계서 v0.2 §6 · 결정 K1 ~ K6 · D1 ~ D7 추천안) — 기준값 이름은 다른 문자도 세므로 `reply_foreign_*` 로 정함 ·
@@ -449,7 +450,7 @@ def on_stop(payload: dict, rules: dict, subagent: bool) -> dict | None:
         rows = [f"- {f['id']} «{f['word']}」 → {f['use']} · …{f['context']}…" for f in findings[:cap]]
         if len(findings) > cap:
             rows.append(f"- 외 {len(findings) - cap}개")
-        rows.append("용어 자체를 설명하는 자리라면 그 말을 «…」 로 감쌉니다(인용 안은 검사하지 않습니다). 세부 = Skill `ko-terms`.")
+        rows.append("용어 자체를 설명하는 자리라면 그 말을 «…」 로 감쌉니다(인용 안은 검사하지 않습니다). 세부 = Skill `ko-terms:ko-terms`.")
         parts.append(head + "\n" + "\n".join(rows))
     return {"decision": "block", "reason": "\n".join(parts)}
 

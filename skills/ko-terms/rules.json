@@ -25,12 +25,11 @@
     },
     {
       "id": "T02",
-      "enabled": false,
-      "find": "레포(?!지토리)",
+      "enabled": true,
+      "find": "레포(?!지토리|트)",
       "use": "레포지토리",
       "label": "레포",
-      "allow": [],
-      "why_disabled": "D5 — 기존 글 정리(4단계) 뒤에 켠다"
+      "allow": []
     },
     {
       "id": "T03",
